@@ -61,7 +61,7 @@
   <ol>
     <li>First, I looked at the ESP32 wiring diagram to identify the <code>TOUCH</code> capable pins.</li>
     <li>I attached a piece of copper tape to one of the touch pins (e.g. <code>GPIO4</code>) using a wire.</li>
-    <li>Then I wired up 3 LEDs to GPIO pins with resistors (220Ω), with their cathodes going to GND.</li>
+    <li>Then I wired up 4 LEDs to GPIO pins with resistors (220Ω), with their cathodes going to GND.</li>
     <li>I used <code>touchRead()</code> in Arduino to check the touch pin value. If the value dropped below a threshold (30), I turned the LEDs on.</li>
   </ol>
 
