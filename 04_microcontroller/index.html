@@ -1,41 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8">
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
 
 <body>
-<xmp style="display:none;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+    <div class="container-fluid" style="align-items: center; justify-content: center;">
+      <div class="flexrow">
+        <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
+      </div>
+      <div class="navbar-nav">
+        <h4><a class="nav-link" href="../index.html">Home</a></h4>
+        <h4><a class="nav-link" href="../about.html">About</a></h4>
+      </div>
+    </div>
+  </nav>
+
+  <xmp style="display:none;">
 <div class="textcontainer">
-<p class="margin">   </p>
+  <p class="margin"> </p>
 
-<h3>Week 4: Microcontroller Programming</h3>
+  <h3>Week 4: Microcontroller Programming</h3>
 
-<h4>[Do Something with an arduino]</h4>
+  <h4>Touch Sensor-Activated LEDs with the ESP32</h4>
 
+  <img src="./week4image1.JPG" width="400">
+  <img src="./week4image2.JPG" width="400">
+  <img src="./week4gif.gif" width="400">
 
+  <p>
+    This week I wanted to try something different. I noticed the ESP32 has dedicated touch-capable GPIO pins, and I got curious about using them for a simple project. I made a basic touch sensor that turns on multiple LEDs using GPIO pins.
+  </p>
 
+  <h5>Steps I Took:</h5>
+  <ol>
+    <li>First, I looked at the <strong>ESP32 wiring diagram</strong> to identify the <code>TOUCH</code> capable pins.</li>
+    <li>I attached a piece of copper tape to one of the touch pins (e.g. <code>GPIO4</code>) using a wire.</li>
+    <li>Then I wired up 3 LEDs to GPIO pins with resistors (220Ω), with their cathodes going to GND.</li>
+    <li>I used <code>touchRead()</code> in Arduino to check the touch pin value. If the value dropped below a threshold (30), I turned the LEDs on.</li>
+  </ol>
 
+  <h5>Code Snippet:</h5>
+  <pre><code class="language-arduino">
+#define TOUCH_PIN T0
+#define LED_PIN 12
+
+int threshold = 30;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+}
+
+void loop() {
+  int touchValue = touchRead(TOUCH_PIN);
+  Serial.println(touchValue);
+
+  if (touchValue < threshold) {
+    digitalWrite(LED_PIN, HIGH);
+  } else {
+    digitalWrite(LED_PIN, LOW);
+  }
+}
+  </code></pre>
+
+  <h5>Wiring Diagram:</h5>
+  <img src="Circuit Diagram.png" width="600px" alt="Circuit Diagram showing ESP32-C3 with touch sensor and LEDs">
 
 </div>
-</xmp>
-</body>
+  </xmp>
 
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+  <script src="../strapdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
 </html>
