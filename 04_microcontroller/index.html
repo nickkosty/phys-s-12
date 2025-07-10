@@ -10,6 +10,22 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <style>
+    pre code {
+      background: #f8f9fa;
+      color: #212529;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      padding: 15px;
+      border-radius: 5px;
+      display: block;
+      overflow-x: auto;
+    }
+
+    img {
+      margin: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -33,9 +49,9 @@
 
   <h4>Touch Sensor-Activated LEDs with the ESP32</h4>
 
-  <img src="./week4image1.JPG" width="400">
-  <img src="./week4image2.JPG" width="400">
-  <img src="./week4gif.gif" width="400">
+  <img src="./week4image1.JPG" width="300">
+  <img src="./week4image2.JPG" width="300">
+  <img src="./week4gif.gif" width="300">
 
   <p>
     This week I wanted to try something different. I noticed the ESP32 has dedicated touch-capable GPIO pins, and I got curious about using them for a simple project. I made a basic touch sensor that turns on multiple LEDs using GPIO pins.
@@ -43,7 +59,7 @@
 
   <h5>Steps I Took:</h5>
   <ol>
-    <li>First, I looked at the <strong>ESP32 wiring diagram</strong> to identify the <code>TOUCH</code> capable pins.</li>
+    <li>First, I looked at the ESP32 wiring diagram to identify the <code>TOUCH</code> capable pins.</li>
     <li>I attached a piece of copper tape to one of the touch pins (e.g. <code>GPIO4</code>) using a wire.</li>
     <li>Then I wired up 3 LEDs to GPIO pins with resistors (220Ω), with their cathodes going to GND.</li>
     <li>I used <code>touchRead()</code> in Arduino to check the touch pin value. If the value dropped below a threshold (30), I turned the LEDs on.</li>
