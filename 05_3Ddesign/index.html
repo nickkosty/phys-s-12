@@ -1,38 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8">
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet">
+</head>
 
 <body>
-<xmp style="display:none;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+    <div class="container-fluid" style="align-items: center; justify-content: center;">
+      <div class="flexrow">
+        <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
+      </div>
+      <div class="navbar-nav">
+        <h4><a class="nav-link" href="../index.html">Home</a></h4>
+        <h4><a class="nav-link" href="../about.html">About</a></h4>
+      </div>
+    </div>
+  </nav>
+
+  <xmp style="display:none;">
 <div class="textcontainer">
-<p class="margin">   </p>
+  <p class="margin"> </p>
 
-<h3>Week 5: 3D Design & Printing</h3>
+  <h3>Week 5: 3D Design & Printing</h3>
 
-<h4>Assignment: Model and 3D print something</h4>
+  <h4>Assignment: Model and 3D Print Something</h4>
+  <p>I designed a print-in-place box with a working hinge. This type of part can’t be made subtractively because the hinge is printed fully assembled in one piece.</p>
+  <p>I first created a standard box which is hollow, then I watched a youtube tutorial on how to make a hinge, and finally I experimented a bit to create a little clasp/clip to keep the box closed.</p>
 
+  <div style="margin: 20px 0;">
+    <img src="printinplacebox1.png" width="400">
+    <img src="printinplacebox.gif" width="400">
+  </div>
 
+  <h5>Download My Files:</h5>
+  <a href="./week 5.zip" download>Download Week 5 Files (ZIP)</a>
+
+  <h4>Scan: Polycam Photogrammetry</h4>
+  <p>I used Polycam to scan a notebook. I had trouble scanning using my phone since my camera is a bit damaged so this is the best model I created after several attempts. Will try making a better model in the future using a different scanner.</p>
+
+  <div style="margin: 20px 0;">
+    <img src="poly-snapshot.jpg" width="400">
+  </div>
+
+  <h5>Download My Scan:</h5>
+  <a href="./polycamscan.zip" download>Download Scan Files</a>
+
+  <h4>Final Project Planning</h4>
+  <img src="Shopify Counter PDP-min.webp" width="300">
+  <ul>
+    <li><strong>Project:</strong> Mechanical Shopify-style Counter - a 3D-printed 5-digit rolling counter inspired by Shopify’s retail display unit</li>
+    <li><strong>Bill of Materials:</strong> ESP32 microcontroller, 5x servo motors, jumper wires, PLA filament, external 5V power supply, custom 3D-printed digit wheels</li>
+    <li><strong>Timeline:</strong> 
+      <ul>
+        <li>Week 1: Design gear mechanism + print digit wheels</li>
+        <li>Week 2: Connect servos + ESP32 logic</li>
+        <li>Week 3: Build housing + program number update logic</li>
+        <li>Week 4: Test + debug</li>
+      </ul>
+    </li>
+    <li><strong>Goals:</strong> Display numbers from 00000 to 99999 in real time using motor-driven digits. Eventually connect to a live API (e.g. Shopify order count) for auto-updates.</li>
+  </ul>
 </div>
-</xmp>
-</body>
+  </xmp>
 
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+  <script src="../strapdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
 </html>
