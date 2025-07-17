@@ -44,6 +44,7 @@
   <ol>
     <li>Connected VCC to 5V, GND to GND, TRIG to GPIO5, and ECHO to GPIO18.</li>
     <li>Wrote a script to measure pulse length using <code>pulseIn()</code> and convert it to distance in cm.</li>
+    <li>Used <code>millis()</code> instead of <code>delay()</code> to keep loop responsive and non-blocking.</li>
     <li>Tested the sensor at different distances and confirmed accuracy within ~1 cm.</li>
   </ol>
 
@@ -53,7 +54,7 @@
 #define ECHO_PIN 18
 
 unsigned long previousMillis = 0;
-const unsigned long interval = 500; // 500ms delay
+const unsigned long interval = 500;
 
 void setup() {
   Serial.begin(115200);
@@ -84,8 +85,6 @@ void loop() {
   </code></pre>
 
   <h5>Calibration Data:</h5>
-  <p>Here’s sample data I got from the sensor at different known distances:</p>
-
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -101,7 +100,56 @@ void loop() {
     </tbody>
   </table>
 
-  <p>The readings were consistently accurate within about ±1 cm. The measurable range is roughly 2–400 cm according to Google however I only measured at short distances up to 45cm. I found that the measured distance varies depending on the angle of the end point.</p>
+  <p>The readings were consistently accurate within about ±1 cm. The measurable range is roughly 2–400 cm according to Google, but I tested up to 45 cm. Accuracy drops when the angle of the surface changes.</p>
+
+  <h4>Assignment 2: Capacitive Touch Sensor</h4>
+
+  <p>
+    I first tried to make a pressure-based capacitive sensor using Velostat and copper tape, but it didn’t give consistent readings. I couldn’t get reliable or noticeable changes in capacitance from pressure.
+  </p>
+
+  <img src="./pressuresensor.JPG" width="400">
+
+  <p>
+    So I switched to a simpler method: using a single wire of copper tape as a touch sensor connected to GPIO4. The ESP32 has built-in support for capacitive sensing on certain pins, so I used <code>touchRead()</code> to detect touch.
+  </p>
+
+  <h5>Steps I Took:</h5>
+  <ol>
+    <li>Connected a piece of copper tape to GPIO4.</li>
+    <li>Left the copper exposed and tested how readings changed when I touched it.</li>
+    <li>Calibrated by printing values and observing that touching it usually brought the value below 20.</li>
+    <li>Set 20 as the threshold to detect touch.</li>
+  </ol>
+
+  <h5>Code Snippet:</h5>
+  <pre><code class="language-arduino">
+#define TOUCH_PIN T0
+
+int threshold = 20;
+String lastState = "";
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  int value = touchRead(TOUCH_PIN);
+  String currentState = (value <= threshold) ? "Touch detected!" : "No touch.";
+
+  if (currentState != lastState) {
+    Serial.print("Touch Value: ");
+    Serial.println(value);
+    Serial.println(currentState);
+    lastState = currentState;
+  }
+}
+  </code></pre>
+
+  <p>This worked surprisingly well using just one wire connected to a capacitive touch pin. I ran multiple tests by placing the copper wire on different surfaces, and found that the baseline values varied depending on the material underneath. After experimenting, a threshold of 20 consistently indicated a real touch, regardless of slight fluctuations. I updated the code to only print when the state changes (from touch to no touch or vice versa), making the output much cleaner and easier to track during testing.</p>
+
+  <img src="./touchsensor.JPG" width="400">
+  <img src="./touchsensor.gif" width="400">
 
 </div>
   </xmp>
