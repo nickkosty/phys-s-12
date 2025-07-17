@@ -1,39 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8">
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
 
 <body>
-<xmp style="display:none;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+    <div class="container-fluid" style="align-items: center; justify-content: center;">
+      <div class="flexrow">
+        <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
+      </div>
+      <div class="navbar-nav">
+        <h4><a class="nav-link" href="../index.html">Home</a></h4>
+        <h4><a class="nav-link" href="../about.html">About</a></h4>
+      </div>
+    </div>
+  </nav>
+
+  <xmp style="display:none;">
 <div class="textcontainer">
-<p class="margin">   </p>
+  <p class="margin"> </p>
 
-<h3>Week 6: Electronic Inputs</h3>
+  <h3>Week 6: Electronic Inputs</h3>
 
-<h4>Assignment 1: Capactive Sensor<h4>
+  <h4>Assignment 1: Distance Sensor with ESP32</h4>
 
-<h4>Assignment 2: [Use + Calibrate Another Sensor]</h4>
+  <img src="./distancesensor.gif" width="400">
+  <img src="./distancesensor.JPG" width="400">
+
+  <p>
+    I used an HC-SR04 ultrasonic sensor to measure distance and display it on the serial monitor. It works by sending a pulse from the trigger pin and measuring how long it takes for the echo to return.
+  </p>
+
+  <h5>Steps I Took:</h5>
+  <ol>
+    <li>Connected VCC to 5V, GND to GND, TRIG to GPIO5, and ECHO to GPIO18.</li>
+    <li>Wrote a script to measure pulse length using <code>pulseIn()</code> and convert it to distance in cm.</li>
+    <li>Tested the sensor at different distances and confirmed accuracy within ~1 cm.</li>
+  </ol>
+
+  <h5>Code Snippet:</h5>
+  <pre><code class="language-arduino">
+#define TRIG_PIN 5
+#define ECHO_PIN 18
+
+unsigned long previousMillis = 0;
+const unsigned long interval = 500; // 500ms delay
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+
+    long duration = pulseIn(ECHO_PIN, HIGH);
+    float distance = duration * 0.034 / 2;
+
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
+  }
+}
+  </code></pre>
+
+  <h5>Calibration Data:</h5>
+  <p>Here’s sample data I got from the sensor at different known distances:</p>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Measured Distance (cm)</th>
+        <th>Actual Distance (cm)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>7.05</td><td>7</td></tr>
+      <tr><td>14.90</td><td>15</td></tr>
+      <tr><td>29.12</td><td>30</td></tr>
+      <tr><td>44.83</td><td>45</td></tr>
+    </tbody>
+  </table>
+
+  <p>The readings were consistently accurate within about ±1 cm. The measurable range is roughly 2–400 cm according to Google however I only measured at short distances up to 45cm. I found that the measured distance varies depending on the angle of the end point.</p>
 
 </div>
-</xmp>
-</body>
+  </xmp>
 
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+  <script src="../strapdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
 </html>

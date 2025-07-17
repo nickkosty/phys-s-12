@@ -105,3 +105,16 @@ code {
   padding: 20px;
   font-size: 20px;
 }
+
+pre code {
+  background-color: #2d2b33;
+  color: #EEE7E8;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 5px;
+  display: block;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
