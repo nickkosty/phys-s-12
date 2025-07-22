@@ -33,7 +33,7 @@
   <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
     <img src="./mvpphoto.jpg" width="400">
     
-    <video autoplay muted playsinline loop controls style="max-width: 100%; height: auto; max-width: 400px;">
+    <video autoplay muted playsinline loop controls style="max-width: 100%; height: auto; max-width: 350px;">
       <source src="./mvpvideo.webm" type="video/webm">
       Your browser does not support the video tag.
     </video>
@@ -48,7 +48,7 @@
     It honestly felt like half the project was just messing around in Fusion trying to get stuff to fit.
   </p>
 
-  <img src="./fusion.png" width="400">
+  <img src="./fusion.png" width="800">
 
   <p>
     For the hardware, I used a 28BYJ-48 stepper motor with a ULN2003 driver board and wired it to an ESP32. For now, I’m just typing “1” into the serial monitor to move it one digit forward like a sales counter.
@@ -143,7 +143,7 @@ void loop() {
 
   <h5>What’s Next:</h5>
   <p>
-    Gonna keep working on making the flaps more reliable and clean. Will probably add real inputs (maybe live data or a button) and a way to reset the number. Might also redesign the frame to look nicer and not be held together by random prints.
+    Gonna keep working on making the flaps more reliable and clean. Will add real inputs via shopify API, a way to reset the number, and possibly a sound effect that plays with each sale. Might also redesign the frame to look nicer and not be held together by random prints.
   </p>
 
   <h4>Download Project Files</h4>
