@@ -1,40 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8">
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
 
 <body>
-<xmp style="display:none;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+    <div class="container-fluid" style="align-items: center; justify-content: center;">
+      <div class="flexrow">
+        <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
+      </div>
+      <div class="navbar-nav">
+        <h4><a class="nav-link" href="../index.html">Home</a></h4>
+        <h4><a class="nav-link" href="../about.html">About</a></h4>
+      </div>
+    </div>
+  </nav>
+
+  <xmp style="display:none;">
 <div class="textcontainer">
-<p class="margin">   </p>
+  <h3>Week 7: Electronic Outputs</h3>
+  <h4>Minimum Viable Product: Split-Flap Test</h4>
 
-<h3>Week 7: Electronic Outputs</h3>
+  <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+    <img src="./mvpphoto.jpg" width="400">
+    
+    <video autoplay muted playsinline loop controls style="max-width: 100%; height: auto; max-width: 400px;">
+      <source src="./mvpvideo.webm" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
+  <p>
+    This week I just wanted to get the flap to move when I press a key. Not doing anything fancy yet. Just wanted to prove that the motor and flaps work together and nothing breaks.
+  </p>
 
+  <p>
+    Fusion took way longer than I expected. Designing the shafts and gears was painful. I had to redo them a bunch of times because they were either too loose or just straight up snapped. 
+    It honestly felt like half the project was just messing around in Fusion trying to get stuff to fit.
+  </p>
 
-<h4>Assignment: Minimum Viable Product for Final Project</h4>
+  <img src="./fusion.png" width="400">
 
+  <p>
+    For the hardware, I used a 28BYJ-48 stepper motor with a ULN2003 driver board and wired it to an ESP32. For now, I’m just typing “1” into the serial monitor to move it one digit forward like a sales counter.
+  </p>
+
+  <h5>Steps I Took:</h5>
+  <ol>
+    <li>Modeled shafts and gears in Fusion.</li>
+    <li>3D printed everything. Most of it didn’t work right away.</li>
+    <li>Fixed tolerances, adjusted gear size, reinforced shaft so it wouldn't snap.</li>
+    <li>Wired stepper to ESP32 through ULN2003.</li>
+    <li>Wrote simple code that listens to Serial and steps the motor.</li>
+  </ol>
+
+  <h5>Code:</h5>
+  <pre><code class="language-arduino">
+const int motorPins[4] = {32, 33, 25, 26};
+
+const int halfStepSequence[8][4] = {
+  {1, 0, 0, 0},
+  {1, 1, 0, 0},
+  {0, 1, 0, 0},
+  {0, 1, 1, 0},
+  {0, 0, 1, 0},
+  {0, 0, 1, 1},
+  {0, 0, 0, 1},
+  {1, 0, 0, 1}
+};
+
+const int stepsPerDigit = 50;
+
+int currentDigit = 0;
+int currentStep = 0;
+int targetSteps = 0;
+
+unsigned long lastStepTime = 0;
+const unsigned long stepInterval = 2;
+bool stepping = false;
+
+void setup() {
+  Serial.begin(115200);
+  for (int i = 0; i < 4; i++) {
+    pinMode(motorPins[i], OUTPUT);
+  }
+  Serial.println("Type '1' to flap one digit forward:");
+}
+
+void loop() {
+  if (Serial.available()) {
+    char input = Serial.read();
+    if (input == '1' && !stepping) {
+      targetSteps = stepsPerDigit * 8;
+      currentStep = 0;
+      stepping = true;
+      currentDigit = (currentDigit + 1) % 10;
+      Serial.print("Flap at digit: ");
+      Serial.println(currentDigit);
+    }
+  }
+
+  if (stepping && millis() - lastStepTime >= stepInterval) {
+    lastStepTime = millis();
+    int phase = currentStep % 8;
+    for (int p = 0; p < 4; p++) {
+      digitalWrite(motorPins[p], halfStepSequence[phase][p]);
+    }
+    currentStep++;
+    if (currentStep >= targetSteps) {
+      stepping = false;
+    }
+  }
+}
+  </code></pre>
+
+  <h5>Problems I Ran Into:</h5>
+  <ul>
+    <li>Stepper wasn’t spinning, it just vibrated. Turned out I had the wrong stepping sequence.</li>
+    <li>Gear slipped on the shaft. Had to reprint with tighter fit.</li>
+    <li>Shaft kept snapping. Made it thicker and lowered the motor speed.</li>
+    <li>Still no sensor feedback, just moving blind based on step count. Will fix later.</li>
+  </ul>
+
+  <img src="./issue1.JPG" width="400">
+  <img src="./issue2.JPG" width="400">
+
+  <h5>Oscilloscope:</h5>
+  <p>
+    Hooked up the oscilloscope to one of the motor pins to see the pulses. Looked clean, square wave pulses every 2ms like I set in the code. Didn’t give me anything crazy new, but it confirmed everything’s working how it should.
+  </p>
+
+  <img src="./oscilloscope-placeholder.jpg" width="400">
+
+  <h5>What’s Next:</h5>
+  <p>
+    Gonna keep working on making the flaps more reliable and clean. Will probably add real inputs (maybe live data or a button) and a way to reset the number. Might also redesign the frame to look nicer and not be held together by random prints.
+  </p>
+
+  <h4>Download Project Files</h4>
+  <p><a href="./week7.zip" download>Click here to download ZIP</a></p>
 
 </div>
-</xmp>
-</body>
+  </xmp>
 
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+  <script src="../strapdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
 </html>
