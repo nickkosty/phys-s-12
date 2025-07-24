@@ -1,37 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8">
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet">
+</head>
 
 <body>
-<xmp style="display:none;">
-<div class="textcontainer">
-<p class="margin">   </p>
+  <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+    <div class="container-fluid" style="align-items: center; justify-content: center;">
+      <div class="flexrow">
+        <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
+      </div>
+      <div class="navbar-nav">
+        <h4><a class="nav-link" href="../index.html">Home</a></h4>
+        <h4><a class="nav-link" href="../about.html">About</a></h4>
+      </div>
+    </div>
+  </nav>
 
-<h3>Week 8: CNC Milling</h3>
+  <xmp style="display:none;">
+  <div class="textcontainer">
+    <h3>Week 8: CNC Milling</h3>
+    <h4>Assignment: Make Something With CNC</h4>
 
-<h4>Assignment: Make Something With CNC</h4>
+    <p>I worked with Kamron this week. We decided to CNC a fidget spinner out of wood and turn it into a mold for chocolate casting. Here's how it went:</p>
 
-</div>
-</xmp>
+    <h5>Step 1: Found and edited a 3D model</h5>
+    <p>Grabbed a spinner model online and cleaned it up in Fusion. I tweaked the design to get tight tolerances and made it suitable for a 2D CNC toolpath.</p>
+    <img src="./fidgetstl.png" width="400" class="img-fluid mb-4">
+
+    <h5>Step 2: CNC milled the wood body</h5>
+    <p>Used the ShopBot to cut it out of wood. Some edges were a little tight, and one cracked when inserting the bearings, but it still worked well.</p>
+    <img src="./cnc.gif" width="400" class="img-fluid mb-4">
+
+    <h5>Step 3: Pressed in bearings and added thumb grips</h5>
+    <p>Pressed in the bearings and added 3D printed thumb grips to make it easier to spin. These made it feel more polished.</p>
+    <img src="./bearingcaps.png" width="400" class="img-fluid mb-4">
+    <img src="./spinner.JPG" width="400" class="img-fluid mb-4">
+    <img src="./fidget.gif" width="400" class="img-fluid mb-4">
+
+    <h5>Step 4: Built a mold box and poured silicone</h5>
+    <p>Laser cut a box out of cardboard to hold the silicone. Used Sorta-Clear 37 Part A + B and suspended the spinner in the mold overnight.</p>
+    <img src="./boxstl.png" width="400" class="img-fluid mb-4">
+    <img src="./moldbox.JPG" width="400" class="img-fluid mb-4">
+    <img src="./suspendedspinner.JPG" width="400" class="img-fluid mb-4">
+
+    <h5>Step 5: Poured chocolate into the mold</h5>
+    <p>The next day, we poured melted chocolate into the mold and stuck a bearing in the center. It came out as a fully functional chocolate spinner.</p>
+    <img src="./mold.JPG" width="400" class="img-fluid mb-4">
+    <img src="./finishmold.JPG" width="400" class="img-fluid mb-4">
+    <img src="./chocolate.JPG" width="400" class="img-fluid mb-4">
+
+    <h5>Conclusion:</h5>
+    <p>The whole thing turned out great. The wood version worked, the mold came out clean, and the chocolate version spun just like the real one. Learned a lot about tolerances and setting up both CNC and mold workflows.</p>
+
+    <h5>Bonus: Vacuum Formed LEGO Ice Tray</h5>
+    <p>As a side experiment, I also used the vacuum former to make a silicone ice tray shaped like a LEGO piece. Came out clean and works surprisingly well.</p>
+    <img src="./lego.png" width="400" class="img-fluid mb-4">
+
+    <h5>Download Files:</h5>
+    <p><a href="./week8.zip" download>Click here to download all project files (not many files this week)</a></p>
+  </div>
+  </xmp>
+
+  <script src="../strapdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
 
 </html>
