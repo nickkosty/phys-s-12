@@ -6,6 +6,26 @@
   <title>PHYS S-12: Intro to Digital Fabrication</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="../style.css" rel="stylesheet">
+  <style>
+    .media-equal {
+      width: 100%;
+      max-width: 400px;
+      height: 450px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    video.media-equal {
+      display: block;
+    }
+
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 6px;
+    }
+  </style>
 </head>
 
 <body>
@@ -21,25 +41,20 @@
     </div>
   </nav>
 
-  <xmp style="display:none;">
-  <div class="textcontainer">
+  <div class="textcontainer p-4">
     <h3>Week 9: Radio, WiFi, Bluetooth (IoT)</h3>
     <h4>Assignment: Program something with IoT</h4>
 
     <p>This week I focused on building a system that connects the Shopify API to my MVP that I made. My original goal was to have every order increment my physical counter, but I ran out of time to finish that part. I’ll keep working on it next week.</p>
 
     <h5>Step 1: Shopify → Firebase Integration</h5>
-<p>
-  I wrote a webhook server that listens for new Shopify orders and pushes them to Firebase. Every time an order is placed, the database logs the data and increments a counter.
-</p>
+    <p>I wrote a webhook server that listens for new Shopify orders and pushes them to Firebase. Every time an order is placed, the database logs the data and increments a counter.</p>
 
-<img src="./firebase.png" width="1000" class="img-fluid mb-4" alt="Shopify to Firebase flow">
+    <img src="./firebase.png" width="1000" class="img-fluid mb-4" alt="Shopify to Firebase flow">
 
-<p>
-  This part was tricky, there are basically no tutorials online for doing this exact setup. I’ve never worked with databases or cloud functions before, so I had to figure most of it out myself. I used ChatGPT a lot and Googled every roadblock. With a bunch of trial and error, I finally got everything working smoothly.
-</p>
+    <p>This part was tricky, there are basically no tutorials online for doing this exact setup. I’ve never worked with databases or cloud functions before, so I had to figure most of it out myself. I used ChatGPT a lot and Googled every roadblock. With a bunch of trial and error, I finally got everything working smoothly.</p>
 
-<pre><code class="language-js">
+    <pre><code class="language-js">
 // server.js
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -47,7 +62,6 @@ const admin = require('firebase-admin');
 const crypto = require('crypto');
 const app = express();
 
-// Verify Shopify webhook signature
 function verifyShopifyWebhook(req, res, buf) {
   const hmacHeader = req.get('X-Shopify-Hmac-Sha256');
   const generatedHmac = crypto
@@ -60,10 +74,8 @@ function verifyShopifyWebhook(req, res, buf) {
   }
 }
 
-// Middleware
 app.use(bodyParser.json({ verify: verifyShopifyWebhook }));
 
-// Firebase config
 const serviceAccount = {
   type: "service_account",
   project_id: process.env.FIREBASE_PROJECT_ID,
@@ -79,7 +91,6 @@ admin.initializeApp({
 
 const db = admin.database();
 
-// Webhook endpoint
 app.post('/webhook', (req, res) => {
   const order = req.body;
 
@@ -117,14 +128,11 @@ app.post('/webhook', (req, res) => {
     });
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-</code></pre>
+    </code></pre>
 
-<p>
-  This worked flawlessly. I was able to test live orders and saw the counter increment in Firebase in real time.
-</p>
+    <p>This worked flawlessly. I was able to test live orders and saw the counter increment in Firebase in real time.</p>
 
     <img src="./firebase-counter.png" width="1000" class="img-fluid mb-4" alt="Firebase order counter screenshot">
 
@@ -134,26 +142,122 @@ app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
     <h5>Bonus: Candy Dispenser Project</h5>
     <p>On the side, I also built a candy dispenser using a 3D-printed STL I found online and a servo motor. It dispenses a piece of candy when a button is pressed online.</p>
 
-    <img src="./finished.JPG" width="400" class="img-fluid mb-4" alt="3D printed candy dispenser">
-    
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <img src="./finished.JPG" class="media-equal" alt="Candy dispenser front">
+      </div>
+      <div class="col-md-6 mb-3">
+        <video class="media-equal" autoplay muted loop playsinline>
+          <source src="./working.webm" type="video/webm">
+        </video>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <img src="./wiring.JPG" class="media-equal" alt="Candy dispenser wiring">
+      </div>
+      <div class="col-md-6 mb-3">
+        <video class="media-equal" autoplay muted loop playsinline>
+          <source src="./dispensing.webm" type="video/webm">
+        </video>
+      </div>
+    </div>
 
     <pre><code class="language-cpp">
 // Candy Dispenser Arduino Code
-#include &lt;Servo.h&gt;
+#include <WiFi.h>
+#include <ESP32Servo.h>
 
-Servo servo;
-int buttonPin = 2;
+Servo myservo;
+int servoPin = 26;
+int pos = 0;
+char state='-';
+
+const char *ssid = "MAKERSPACE";
+const char *password = "12345678";
+
+NetworkServer server(80);
 
 void setup() {
-  servo.attach(9);
-  pinMode(buttonPin, INPUT_PULLUP);
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  myservo.setPeriodHertz(50);
+  myservo.attach(servoPin, 1000, 2000);
+
+  myservo.write(pos);
+
+  Serial.begin(115200);
+  pinMode(2, OUTPUT);
+  delay(10);
+
+  Serial.println();
+  Serial.println("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected.");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.begin();
 }
 
 void loop() {
-  if (digitalRead(buttonPin) == LOW) {
-    servo.write(90);
-    delay(800);
-    servo.write(0);
+  NetworkClient client = server.accept();
+
+  if (client) {
+    Serial.println("New Client.");
+    String currentLine = "";
+    while (client.connected()) {
+      if (client.available()) {
+        char c = client.read();
+        Serial.write(c);
+        if (c == '\n') {
+          if (currentLine.length() == 0) {
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println();
+            client.print("Click <a href=\"/C\">here</a> to get candy!.<br>");
+            client.println();
+            break;
+          } else {
+            currentLine = "";
+          }
+        } else if (c != '\r') {
+          currentLine += c;
+        }
+
+        if (currentLine.endsWith("GET /C")) {
+          state = 'c';
+        }
+
+        if (state == 'c') {
+          while (pos <= 150) {
+            pos += 10;
+            myservo.write(pos);
+            delay(15);
+          }
+          while (pos >= 0) {
+            pos -= 10;
+            myservo.write(pos);
+            delay(15);
+          }
+          state = '-';
+        }
+      }
+    }
+    client.stop();
+    Serial.println("Client Disconnected.");
   }
 }
     </code></pre>
@@ -162,11 +266,9 @@ void loop() {
     <p>This was one of the most exciting projects so far. I learned a ton about working with webhooks, real-time databases, and cloud servers. Even though I didn’t finish everything, I made major progress and laid the foundation to finish it soon.</p>
 
     <h5>Download Files:</h5>
-    <p><a href="./week9.zip" download>Click here to download all project files (server code, candy dispenser STL, Arduino sketch)</a></p>
+    <p><a href="./week9.zip" download>Click here to download all project files (literally just the candy dispenser stl)</a></p>
   </div>
-  </xmp>
 
-  <script src="../strapdown.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
