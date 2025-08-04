@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
+<head>
+  <meta charset="UTF-8">
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet">
+</head>
 
+<body>
 
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
+<nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+  <div class="container-fluid" style="align-items: center; justify-content: center;">
     <div class="flexrow">
       <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
     </div>
@@ -18,19 +22,75 @@
   </div>
 </nav>
 
-<body>
 <xmp style="display:none;">
 <div class="textcontainer">
-<p class="margin"></p>
+  <p class="margin"></p>
 
-<h3>Final Project: [INSERT FINAL PROJECT HERE]</h3>
+  <h3>Final Project: Shopify Sales Counter</h3>
 
+  <p>
+    For my final project, I built a physical Shopify sales counter that updates in real time using a stepper motor, an ESP32, Firebase, and Shopify webhooks. The goal is to have a visually satisfying mechanical counter that flaps over each time a new sale comes in.
+  </p>
+
+  <h4>✅ Current Progress</h4>
+  <ul>
+    <li>One digit is fully functional and extremely reliable</li>
+    <li>Each sale is detected within 1–2 seconds of it being placed</li>
+    <li>The ESP32 receives real-time updates from Firebase</li>
+    <li>Stepper motor triggers an 8-digit flip using ULN2003 driver</li>
+  </ul>
+
+  <p>The system automatically calibrates itself using a hall effect sensor to detect the home position of the digit, even after power loss.</p>
+
+  <h4>🧠 System Overview</h4>
+  <ul>
+    <li>ESP32 microcontroller connected to Firebase Realtime Database</li>
+    <li>Stepper motor + ULN2003 driver board</li>
+    <li>Hall effect sensor for homing</li>
+    <li>Firebase Cloud Function that increments the order count when a new order is placed</li>
+  </ul>
+
+  <h4>🗾 Sample Code (ESP32)</h4>
+
+  ```cpp
+  #include <WiFi.h>
+  #include <FirebaseESP32.h>
+  #include <Preferences.h>
+
+  #define WIFI_SSID "MAKERSPACE"
+  #define WIFI_PASSWORD "12345678"
+
+  #define FIREBASE_HOST "shopify-counter-688ee-default-rtdb.firebaseio.com"
+  #define FIREBASE_AUTH "fb4973afa5c5432a4a51b2fc02b43eb4c97018ed"
+
+  FirebaseData fbdo;
+  FirebaseAuth auth;
+  FirebaseConfig config;
+  Preferences prefs;
+
+  // Motor and sensor setup...
+  // Full code available upon request.
+  ```
+
+  <h4>📷 Placeholder Images</h4>
+  <p><img src="digit_demo_placeholder.jpg" width="400px" alt="Stepper Motor Digit Demo"></p>
+  <p><img src="firebase_debug_placeholder.jpg" width="400px" alt="Firebase Debug Log Screenshot"></p>
+
+  <h4>💪 What’s Next</h4>
+  <ul>
+    <li>Build out 2–3 more digits using identical hardware + addressable code</li>
+    <li>Design and 3D print a solid base to mount the motor banks</li>
+    <li>Integrate a global reset feature and offline recovery system</li>
+    <li>Clean up wiring and finalize enclosure</li>
+  </ul>
+
+  <p>This project combines fabrication, electronics, embedded programming, and real-time cloud communication in a clean and functional way. I’m excited to keep building this out and eventually use it as a real Shopify sales display!</p>
 
 </div>
 </xmp>
-</body>
 
 <script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
+</body>
 </html>
