@@ -1,40 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PHYS S-12: Intro to Digital Fabrication </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="../style.css" rel="stylesheet">
-
-
-<nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
-  <div style="align-items: center; justify-content: center;" class="container-fluid">
-    <div class="flexrow">
-      <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
-    </div>
-    <div class="navbar-nav">
-      <h4><a class="nav-link" href="../index.html">Home</a></h4>
-      <h4><a class="nav-link" href="../about.html">About</a></h4>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="UTF-8" />
+  <title>PHYS S-12: Intro to Digital Fabrication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../style.css" rel="stylesheet" />
+  <style>
+    .media-pair {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .media-pair .media {
+      flex: 1 1 420px;         /* two-up on desktop, stacks on small screens */
+      max-width: 600px;        /* keep it tidy */
+      aspect-ratio: 2 / 3;     /* consistent shape */
+      border: 2px solid #a3a3a3;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;        /* nice letterboxing if needed */
+    }
+    .media-pair .media > * {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;       /* match visual size for image & video */
+      display: block;
+    }
+    .caption {
+      color: gray;
+      font-size: 16px;
+      text-align: center;
+      font-style: italic;
+      margin-top: 6px;
+    }
+    pre code {
+      background-color: #2d2b33;
+      color: #EEE7E8;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      padding: 15px;
+      border-radius: 5px;
+      display: block;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
 
 <body>
-<xmp style="display:none;">
+  <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
+    <div class="container-fluid" style="align-items: center; justify-content: center;">
+      <div class="flexrow">
+        <h2 class="nav-title">PHYS S-12 Summer 2025</h2>
+      </div>
+      <div class="navbar-nav">
+        <h4><a class="nav-link" href="../index.html">Home</a></h4>
+        <h4><a class="nav-link" href="../about.html">About</a></h4>
+      </div>
+    </div>
+  </nav>
+
+  <xmp style="display:none;">
 <div class="textcontainer">
-<p class="margin">   </p>
+  <h3>Week 3: Hand Tools and Fabrication</h3>
+  <h4>Kinetic Sculpture</h4>
 
-<h3>Week 3: Hand Tools and Fabrication</h3>
+  <p>
+    For this assignment, I threw together a quick little kinetic sculpture.  
+    I grabbed the cardboard box from my old useless box, wired up a servo,  
+    and made a flag out of a popsicle stick and a Post-it note. The servo  
+    just swings the flag back and forth smoothly. It’s super simple,  
+    but it works and looks kind of funny.
+  </p>
 
-<h4>Kinetic Sculpture</h4>
+  <h5>Demo</h5>
 
+  <div class="media-pair">
+    <div class="media">
+      <video
+        src="kineticsculpture.webm"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="kinetic_sculpture_poster.jpg">
+      </video>
+    </div>
+    <div class="media">
+      <img src="sculpturewiring.JPG" alt="Kinetic sculpture still frame">
+    </div>
+  </div>
 
+  <h5>ESP32 Servo Code</h5>
+  <pre><code>#include &lt;ESP32Servo.h&gt;
+Servo s;
+void setup() {
+  s.setPeriodHertz(50);
+  s.attach(13, 500, 2400);
+}
+void loop() {
+  static int a = 0, dir = 1;
+  s.write(a);
+  a += dir;
+  if (a &gt;= 180 || a &lt;= 0) dir = -dir;
+  delay(10); // smaller = smoother/faster
+}</code></pre>
 
-
+  <p class="caption">ESP32 sweeps the servo to wave the flag.</p>
 </div>
-</xmp>
-</body>
+  </xmp>
 
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+  <script src="../strapdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
 </html>
